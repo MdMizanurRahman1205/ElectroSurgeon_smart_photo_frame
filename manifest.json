@@ -13,11 +13,8 @@
         {
           "path": "ElectroSurgeon_smart_photo_frame.ino.partitions.bin",
           "offset": 32768
-        },
-        {
-          "path": "firmware/boot_app0.bin",
-          "offset": 57344
         }
+        
       
       ]
     }
