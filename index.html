@@ -109,10 +109,14 @@ alt="Electro Surgeon Logo">
         </div>
         <div class="install-wrap">
           <div style="font-size:36px">⌁</div>
-          <strong>ElectroSurgeon Smart Clock</strong>
+          <strong>ElectroSurgeon Smart Photo Frame</strong>
           <span class="micro">ESP32 · USB SERIAL</span>
           <esp-web-install-button manifest="manifest.json">
-            <button slot="activate">Connect &amp; Install Firmware</button>
+           <button class="install-btn" slot="activate">
+               <i class="fa-solid fa-microchip"></i>
+               INSTALL FIRMWARE (Version 1.0)
+           </button>
+            
             <span slot="unsupported">Your browser does not support Web Serial. Use desktop Chrome or Edge.</span>
             <span slot="not-allowed">Serial access is unavailable. Check browser permissions and use HTTPS.</span>
           </esp-web-install-button>
