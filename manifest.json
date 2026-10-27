@@ -1,6 +1,6 @@
 {
   "name": "ElectroSurgeon Smart Photo Frame",
-  "version": "1.0.0",
+  "version": "1.0",
   "new_install_prompt_erase": true,
   "builds": [
     {
@@ -13,9 +13,11 @@
         {
           "path": "ElectroSurgeon_smart_photo_frame.ino.partitions.bin",
           "offset": 32768
+        },
+        {
+          "path": "ElectroSurgeon_smart_photo_frame.ino.bin",
+          "offset": 65536
         }
-        
-      
       ]
     }
   ]
