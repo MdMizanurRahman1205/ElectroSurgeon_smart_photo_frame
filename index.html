@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="ElectroSurgeon Smart Photo Frame firmware flasher. Flash firmware directly from your browser.">
+  <title>ElectroSurgeon Smart Photo Frame | Web Firmware Flasher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+  <style>
+    :root{color-scheme:dark;--bg:#07111f;--panel:#0c1a2b;--panel2:#102238;--line:#20364d;--text:#edf6ff;--muted:#9db0c5;--blue:#42c7ff;--orange:#ff8b42;--green:#70f0b0}
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(ellipse at 12% 0%,#123253 0,transparent 36%),radial-gradient(ellipse at 100% 18%,#342018 0,transparent 28%),var(--bg);color:var(--text);font-family:"Space Grotesk",system-ui,sans-serif}
+    a{color:inherit;text-decoration:none} .wrap{width:min(1120px,calc(100% - 36px));margin:auto}
+    .nav{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}
+    .brand{display:flex;gap:12px;align-items:center;font-weight:700;letter-spacing:.2px}
+    .logo{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--orange));color:#07111f;font-weight:900;font-size:20px;box-shadow:0 0 28px #42c7ff25}
+    .brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+    .navlinks{display:flex;gap:22px;color:var(--muted);font-size:13px}.navlinks a:hover,.social a:hover{color:var(--blue)}
+    .hero{padding:74px 0 44px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid #42c7ff45;background:#42c7ff0c;border-radius:99px;padding:8px 12px;color:#a8e7ff;font:11px "DM Mono",monospace;letter-spacing:1.3px;text-transform:uppercase}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+    h1{font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-3px;margin:22px 0 18px}
+    h1 span{background:linear-gradient(95deg,var(--blue),#b4d9ff 52%,var(--orange));background-clip:text;-webkit-background-clip:text;color:transparent}
+    .lead{font-size:16px;line-height:1.8;color:var(--muted);max-width:600px}
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0 18px}
+    .primary,.secondary{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 19px;border-radius:12px;font-weight:700;font-size:14px;transition:.2s}
+    .primary{background:linear-gradient(110deg,var(--blue),#8be4ff);color:#06111d;box-shadow:0 8px 30px #42c7ff20}.primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px #42c7ff38}
+    .secondary{border:1px solid var(--line);background:#ffffff05;color:var(--text)}.secondary:hover{border-color:#42c7ff88}
+    .micro{font:11px "DM Mono",monospace;color:#8298ae}
+    .device{position:relative;min-height:340px;border:1px solid #29445d;border-radius:28px;background:linear-gradient(145deg,#10243a,#091522);padding:24px;overflow:hidden;box-shadow:0 25px 80px #0005}
+    .device:before{content:"";position:absolute;width:240px;height:240px;right:-75px;top:-85px;border-radius:50%;background:#42c7ff17;filter:blur(4px)}
+    .device-top{display:flex;justify-content:space-between;align-items:center;font:11px "DM Mono",monospace;color:var(--muted)}
+    .live{color:var(--green)}.screen{margin:34px auto 22px;width:min(100%,280px);aspect-ratio:1.8;border:8px solid #26394a;border-radius:13px;background:#02070c;box-shadow:0 0 0 1px #52708a,0 0 35px #42c7ff14;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"DM Mono",monospace;color:#77e5ff;text-shadow:0 0 12px #42c7ff70}
+    .screen .time{font-size:clamp(25px,4vw,37px);letter-spacing:2px}.screen .date{font-size:11px;margin-top:14px;color:#b2cbd9}.screen .mode{font-size:9px;letter-spacing:2px;margin-top:9px;color:var(--orange)}
+    .pins{display:flex;justify-content:center;gap:7px}.pins i{display:block;width:7px;height:20px;border-radius:3px;background:#34495b}.device-caption{text-align:center;font-size:12px;color:var(--muted);margin-top:15px}
+    .section{padding:40px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:20px}.section h2{font-size:27px;letter-spacing:-.8px;margin:0 0 8px}.section-head p{margin:0;color:var(--muted);line-height:1.6;font-size:14px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .card{padding:22px;border:1px solid var(--line);background:linear-gradient(145deg,#102136c9,#0a1725e8);border-radius:18px}
+    .card .icon{width:42px;height:42px;border-radius:12px;background:#42c7ff13;border:1px solid #42c7ff25;display:grid;place-items:center;font-size:20px;margin-bottom:18px}
+    .card h3{font-size:16px;margin:0 0 8px}.card p{color:var(--muted);font-size:13px;line-height:1.7;margin:0}
+    .flashbox{border:1px solid #42c7ff45;background:linear-gradient(135deg,#10263b,#0a1726);border-radius:22px;padding:28px;display:grid;grid-template-columns:1fr .9fr;gap:28px}
+    .flashbox h2{margin:0 0 12px;font-size:27px}.flashbox p{color:var(--muted);line-height:1.7;font-size:14px}
+    .steps{display:grid;gap:12px}.step{display:flex;gap:12px;align-items:flex-start;font-size:13px;line-height:1.6;color:var(--muted)}.num{flex:0 0 27px;height:27px;border:1px solid #42c7ff55;color:var(--blue);border-radius:8px;display:grid;place-items:center;font:12px "DM Mono",monospace}
+    .install-wrap{border:1px solid #2c455b;border-radius:16px;background:#06111d;padding:18px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:14px}
+    esp-web-install-button{display:block;width:100%} esp-web-install-button::part(button){font-family:"Space Grotesk",sans-serif;font-weight:700;border-radius:12px;background:linear-gradient(110deg,var(--blue),#8be4ff);color:#06111d;border:0;padding:15px 20px;width:100%;cursor:pointer}
+    .install-note{font-size:11px;color:#8fa4b9;line-height:1.6}
+    .warning{margin-top:14px;border:1px solid #ff8b4240;background:#ff8b420b;border-radius:12px;padding:13px 14px;color:#eac4a6;font-size:12px;line-height:1.6}
+    .social{display:flex;flex-wrap:wrap;gap:10px}.social a{padding:10px 13px;border:1px solid var(--line);border-radius:10px;background:#ffffff04;color:#c7d7e7;font-size:12px}.social a span{margin-right:7px}
+    footer{border-top:1px solid #ffffff12;margin-top:42px;padding:26px 0 34px;color:#8298ae;font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .mono{font-family:"DM Mono",monospace}
+    @media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:48px;gap:28px}.device{min-height:300px}.grid{grid-template-columns:1fr}.flashbox{grid-template-columns:1fr}.navlinks{gap:12px}.navlinks a:nth-child(2){display:none}.section-head{display:block}.section-head p{margin-top:8px}}
+    @media(max-width:480px){.wrap{width:min(100% - 24px,1120px)}.nav{height:68px}.navlinks{font-size:12px}.brand{font-size:14px}h1{letter-spacing:-2px}.hero{padding-top:38px}.device{padding:18px}.flashbox{padding:18px}}
+  </style>
+</head>
+<body>
+  <header class="wrap nav">
+    <a class="brand" href="#top" aria-label="ElectroSurgeon home">
+      <div class="logo">ES</div><div>ElectroSurgeon<small>Build • Flash • Innovate</small></div>
+    </a>
+    <nav class="navlinks"><a href="#features">Features</a><a href="#flash">Flash firmware</a><a href="#community">Community ↗</a></nav>
+  </header>
+
+  <main id="top" class="wrap">
+    <section class="hero">
+      <div>
+        <div class="eyebrow"><i class="dot"></i> Browser-based firmware installer</div>
+        <h1>Give your project<br><span>a fresh flash.</span></h1>
+        <p class="lead">Install ElectroSurgeon firmware directly from your browser. Connect a supported ESP32 board over USB, select the firmware, and follow the on-screen steps.</p>
+        <div class="actions">
+          <a class="primary" href="#flash">↯ &nbsp; Flash firmware <span>→</span></a>
+          <a class="secondary" href="#instructions">Read instructions</a>
+        </div>
+        <div class="micro">NO APP INSTALLATION · USB CONNECTION REQUIRED</div>
+      </div>
+      <div class="device" aria-label="Illustration of the smart clock display">
+        <div class="device-top"><span>ES / SMART PHOTO FRAME</span><span class="live">● SYSTEM READY</span></div>
+        <div class="screen"><div class="mode">ELECTROSURGEON</div><div class="time">10:27:48</div><div class="date">27 OCT 2026 · MONDAY</div><div class="mode">CLOCK · ANNIVERSARY · MUSIC</div></div>
+        <div class="pins"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="device-caption">ESP32 Smart Photo Frame + Anniversary Countdown + Music Player</div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="section-head"><div><h2>Made for makers.</h2><p>Simple setup. Clear steps. Your next build starts here.</p></div></div>
+      <div class="grid">
+        <article class="card"><div class="icon">⚡</div><h3>Flash from your browser</h3><p>Use Web Serial on a compatible desktop browser—no separate flashing app required.</p></article>
+        <article class="card"><div class="icon">⌁</div><h3>Project-focused firmware</h3><p>Designed for the ESP32 SmartPhoto Frame project with OLED, DS3231 RTC, touch inputs, and DFPlayer Mini.</p></article>
+        <article class="card"><div class="icon">⌘</div><h3>Built by a maker</h3><p>Follow ElectroSurgeon for electronics, embedded systems, DIY builds, and practical tutorials.</p></article>
+      </div>
+    </section>
+
+    <section id="flash" class="section">
+      <div class="flashbox">
+        <div>
+          <div class="eyebrow">Firmware installer</div>
+          <h2 style="margin-top:17px">Ready to flash?</h2>
+          <p>Connect your ESP32 board using a USB data cable, close any serial monitor, then press the install button. Choose the correct serial port when your browser asks.</p>
+          <div class="warning"><strong>Before you continue:</strong> Flashing can erase data already stored on the device. Use firmware only for compatible hardware. This installer will work after you upload the compiled firmware files and update <span class="mono">manifest.json</span>.</div>
+        </div>
+        <div class="install-wrap">
+          <div style="font-size:36px">⌁</div>
+          <strong>ElectroSurgeon Smart Clock</strong>
+          <span class="micro">ESP32 · USB SERIAL</span>
+          <esp-web-install-button manifest="manifest.json">
+            <button slot="activate">Connect &amp; Install Firmware</button>
+            <span slot="unsupported">Your browser does not support Web Serial. Use desktop Chrome or Edge.</span>
+            <span slot="not-allowed">Serial access is unavailable. Check browser permissions and use HTTPS.</span>
+          </esp-web-install-button>
+          <div class="install-note">Requires desktop Chrome/Edge and a USB data cable. USB drivers may be needed for some boards.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="instructions" class="section">
+      <div class="section-head"><div><h2>Flash in four steps.</h2><p>Follow these steps whenever you install a new release.</p></div></div>
+      <div class="grid">
+        <article class="card"><div class="icon">01</div><h3>Connect the board</h3><p>Plug your compatible ESP32 into your computer using a USB data cable.</p></article>
+        <article class="card"><div class="icon">02</div><h3>Choose the port</h3><p>Click Connect &amp; Install Firmware and select the serial port for your board.</p></article>
+        <article class="card"><div class="icon">03</div><h3>Install &amp; reboot</h3><p>Confirm the installation and keep the board connected until the process finishes.</p></article>
+      </div>
+    </section>
+
+    <section id="community" class="section">
+      <div class="section-head"><div><h2>Follow the build.</h2><p>More projects, tutorials, and behind-the-scenes from ElectroSurgeon.</p></div></div>
+      <div class="social">
+        <a href="https://www.youtube.com/@electrosurgeon" target="_blank" rel="noopener noreferrer"><span>▶</span>YouTube</a>
+        <a href="https://www.instagram.com/electro_surgeon/" target="_blank" rel="noopener noreferrer"><span>◎</span>Instagram</a>
+        <a href="https://www.linkedin.com/in/md-mizanur-rahman-0990bb322/" target="_blank" rel="noopener noreferrer"><span>in</span>LinkedIn</a>
+        <a href="https://github.com/MdMizanurRahman1205" target="_blank" rel="noopener noreferrer"><span>⌘</span>GitHub</a>
+        <a href="https://hackster.io/electro_surgeon" target="_blank" rel="noopener noreferrer"><span>⚙</span>Hackster</a>
+        <a href="https://sites.google.com/view/electrosurgeon" target="_blank" rel="noopener noreferrer"><span>🌐</span>Website</a>
+      </div>
+    </section>
+  </main>
+  <footer class="wrap">
+    <div>© <span id="year"></span> <strong>ElectroSurgeon</strong> · Think • Build • Innovate</div>
+    <div class="mono">ENGINEERED FOR MAKERS, BY A MAKER.</div>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
